@@ -152,6 +152,34 @@ select{background-position:calc(100% - 7px) 14px,calc(100% - 3px) 14px}
 .nov{visibility:hidden}
 input.ylw{border-color:var(--yel);box-shadow:0 0 0 1px var(--yel)}
 .ovw{margin:4px 0 0;padding:6px 8px;border:1px solid var(--yel);border-radius:8px;background:#2a2618;color:var(--yel);font-size:12px;line-height:1.4;text-align:center}
+/* さらに縦圧縮 */
+body{padding-block:6px 20px}
+main{gap:5px}
+h1{font-size:15px}
+.ex{font-size:10px;margin-top:-3px}
+.panel{padding:6px 8px}
+.top2{gap:5px;margin-bottom:3px}
+.top2 label{font-size:10px;white-space:nowrap;min-height:0;line-height:1.1;margin:0}
+.top2 .f2{gap:1px}
+input.n,select{height:30px}
+select{background-position:calc(100% - 7px) 13px,calc(100% - 3px) 13px}
+.tg{margin-bottom:2px;gap:10px;font-size:11px}
+.seg button{height:26px;padding:0 14px;font-size:12px}
+.g>div{padding:1px 3px}
+.g>.rl,.g>.h{padding-block:1px}
+.h.tc0,.h.tc1,.h.tc2,.h.tc3{padding-top:2px;font-size:12px}
+.sep{margin-block:1px}
+.res{font-size:18px;line-height:30px}
+.rb{padding-bottom:3px!important}
+.tot{margin:2px 0 0;font-size:12px}
+.tot b{font-size:16px}
+.prh{margin:0 0 4px}
+.pgrid{gap:4px}
+.pb{min-height:30px;font-size:13px}
+.wr{margin-top:4px}
+.wr button{min-height:36px}
+.fullw,.ovw{margin-bottom:4px;padding:4px 8px;font-size:11px}
+.warn{margin:2px 0 0;font-size:11px}
 </style>
 </head>
 <body>
@@ -319,7 +347,7 @@ function cell(cls,node){var d=document.createElement("div");d.className=cls;if(t
 function build(){
   var g=$("g");g.innerHTML="";
   var t2=$("top2");t2.innerHTML="";
-  [["jk","心の実",S.joker,function(v){S.joker=v;upd()}],["tn","残りターン数",S.turns===null?"":S.turns,function(v){S.turns=$("tn").value===""?null:v;upd()}],["pt","メイン彼女・<br>相棒枚数",S.pt,function(v){S.pt=v;upd()}]].forEach(function(d){
+  [["jk","心の実",S.joker,function(v){S.joker=v;upd()}],["tn","残りターン数",S.turns===null?"":S.turns,function(v){S.turns=$("tn").value===""?null:v;upd()}],["pt","メイン彼女・相棒枚数",S.pt,function(v){S.pt=v;upd()}]].forEach(function(d){
     var w=document.createElement("div");w.className="f2";
     w.innerHTML='<label for="'+d[0]+'">'+d[1]+'</label>';
     w.appendChild(inp(d[0],d[2],d[3]));t2.appendChild(w);
