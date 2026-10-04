@@ -24,7 +24,15 @@ main{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
 h1{font-size:19px;margin:0;line-height:1.3}
 .ex{margin:0;color:var(--yel);font-size:12px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;min-width:0}
-.g{display:grid;grid-template-columns:52px repeat(4,minmax(0,1fr)) minmax(0,1.25fr);gap:6px 5px;align-items:center}
+.g{display:grid;grid-template-columns:52px repeat(4,minmax(0,1fr)) minmax(0,1.25fr);gap:0 4px;align-items:center}
+.g>div{padding:3px 3px}
+.g>.rl,.g>.h{padding-block:3px}
+.tc0{background:rgba(255,107,107,.17)}
+.tc1{background:rgba(110,231,160,.15)}
+.tc2{background:rgba(255,208,74,.15)}
+.tc3{background:rgba(111,216,240,.15)}
+.h.tc0,.h.tc1,.h.tc2,.h.tc3{border-radius:10px 10px 0 0;padding-top:6px}
+.rb{border-radius:0 0 10px 10px;padding-bottom:6px!important}
 .h{font-size:11px;color:var(--mut);text-align:center;line-height:1.25}
 .h.grp{border-bottom:1px solid var(--line);padding-bottom:2px}
 .h.b{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--fg);font-weight:700;font-size:12px}
@@ -49,12 +57,16 @@ button.arm{border-color:var(--red);color:var(--red)}
 .xbtn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .caut{margin:8px 0 0;padding:8px 10px;border:1px solid var(--yel);border-radius:8px;font-size:12px;line-height:1.5;color:var(--fg);background:#2a2618}
 .caut b{color:var(--yel);margin-right:8px}
-.bg select{border-color:var(--yel)}
+select.g0{border-color:var(--red);box-shadow:0 0 0 1px var(--red);color:var(--red)}
+select.g1{border-color:var(--grn);box-shadow:0 0 0 1px var(--grn);color:var(--grn)}
+select.g2{border-color:var(--yel);box-shadow:0 0 0 1px var(--yel);color:var(--yel)}
+select.g3{border-color:var(--cy);box-shadow:0 0 0 1px var(--cy);color:var(--cy)}
+select option{color:var(--fg);background:var(--card)}
 .how h2{font-size:15px;margin:0 0 6px}
 .how ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;font-size:13px}
 .how ul{margin:10px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--mut)}
 .how h3{font-size:12px;margin:12px 0 0;color:var(--mut);font-weight:500}
-.sep{grid-column:1/-1;height:1px;background:var(--line)}
+.sep{grid-column:1/-1;height:1px;padding:0!important;background:#55627e;margin-block:3px}
 .h.k{font-size:13px}
 .k0{color:var(--red)}.k1{color:var(--grn)}.k2{color:var(--yel)}.k3{color:var(--cy)}
 input.n,select{width:100%;height:38px;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:7px;padding:0 2px;font:inherit;font-size:16px;text-align:center;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
@@ -62,6 +74,7 @@ select{font-size:14px;padding:0;text-align-last:center;-webkit-appearance:none;a
 input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
 .off{opacity:.3;pointer-events:none}
 .res{text-align:center;font-size:24px;font-weight:700;line-height:38px;border-radius:7px;background:var(--card);border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.res.s{color:var(--fg)}
 .res.z{color:var(--grn)}
 .gl{font-size:11px;color:var(--mut);line-height:1.2}
 .tot{margin:2px 0 0;font-size:14px;text-align:center}
@@ -126,7 +139,7 @@ var K=["筋力","技術","変化","精神"];
 var EX={seeds:[10,10,10,10],flowers:[3,2,0,2],
  b:[{on:true,cost:[7,7,7,7],gain:3},{on:true,cost:[3,5,7,13],gain:1},{on:true,cost:[10,5,4,10],gain:2}]};
 var S=JSON.parse(JSON.stringify(EX));
-try{var sv=localStorage.getItem("romanCost");if(sv){S=JSON.parse(sv);document.getElementById("exnote").hidden=true}}catch(e){}
+try{var sv=localStorage.getItem("romanCost2");if(sv){S=JSON.parse(sv);document.getElementById("exnote").hidden=true}}catch(e){}
 S.b.forEach(function(b){if(!(b.gain>=0&&b.gain<4))b.gain=0;if(!b.auto)b.auto=[false,false,false,false]});
 
 var COMBO=[[2,2,2,2],[1,2,3,6],[3,3,3,4],[2,3,4,9],[3,4,6,6],[7,7,7,7],[3,5,7,13],[4,5,10,10]].map(function(c){return c.join(",")});
@@ -164,7 +177,7 @@ function inp(id,val,cb){
   var cost=id.charAt(0)==="c",el=document.createElement("input"),tm=null;
   el.type="text";el.className="n";el.id=id;el.value=val;
   el.setAttribute("inputmode","numeric");el.setAttribute("pattern","[0-9]*");el.setAttribute("enterkeyhint","next");
-  el.setAttribute("autocomplete","off");el.maxLength=cost?2:(id.charAt(0)==="f"?1:3);
+  el.setAttribute("autocomplete","off");el.maxLength=id.charAt(0)==="f"?1:2;
   el.addEventListener("focus",function(){setTimeout(function(){try{el.select()}catch(e){}},0)});
   el.addEventListener("input",function(ev){
     var c=el.value.replace(/\D/g,"");if(c!==el.value)el.value=c;
@@ -179,8 +192,9 @@ function inp(id,val,cb){
     }else if(id.charAt(0)==="f"){
       go(el);
     }else{
-      if(v.length>=3)go(el);
-      else tm=setTimeout(function(){if(document.activeElement===el&&el.value)go(el)},1000);
+      // 種は最大39個。1桁目が4〜9（または0）なら確定。1〜3のときだけ2桁目を待つ。
+      if(v.length>=2||(v!=="1"&&v!=="2"&&v!=="3"))go(el);
+      else tm=setTimeout(function(){if(document.activeElement===el&&el.value)go(el)},700);
     }
   });
   el.addEventListener("keydown",function(ev){if(ev.key==="Enter"){ev.preventDefault();go(el)}});
@@ -199,18 +213,18 @@ function build(){
     tg.appendChild(lb);
   });
   cell("h","");
-  for(var t=0;t<4;t++)cell("h k k"+t,K[t]);
+  for(var t=0;t<4;t++)cell("h k k"+t+" tc"+t,K[t]);
   cell("h","勝利で<br>もらえる花");
   cell("rl","花");
-  for(var t=0;t<4;t++)(function(t){cell("",inp("f"+t,S.flowers[t],function(v){S.flowers[t]=v;upd()}))})(t);
+  for(var t=0;t<4;t++)(function(t){cell("tc"+t,inp("f"+t,S.flowers[t],function(v){S.flowers[t]=v;upd()}))})(t);
   cell("","");
   cell("rl","種");
-  for(var t=0;t<4;t++)(function(t){cell("",inp("s"+t,S.seeds[t],function(v){S.seeds[t]=v;upd()}))})(t);
+  for(var t=0;t<4;t++)(function(t){cell("tc"+t,inp("s"+t,S.seeds[t],function(v){S.seeds[t]=v;upd()}))})(t);
   cell("","");
   cell("sep","");
   S.b.forEach(function(b,i){
     cell("rl bl"+i,(i+1)+"戦目");
-    for(var t=0;t<4;t++)(function(t){cell("bc"+i,inp("c"+i+"_"+t,b.cost[t],function(v){b.cost[t]=v;b.auto[t]=false;upd()}))})(t);
+    for(var t=0;t<4;t++)(function(t){cell("bc"+i+" tc"+t,inp("c"+i+"_"+t,b.cost[t],function(v){b.cost[t]=v;b.auto[t]=false;upd()}))})(t);
     var sel=document.createElement("select");sel.id="g"+i;sel.setAttribute("aria-label",(i+1)+"戦目に勝利でもらえる花");
     sel.innerHTML=K.map(function(k,j){return'<option value="'+j+'">'+k+'</option>'}).join("");
     sel.value=b.gain;sel.addEventListener("change",function(){b.gain=parseInt(sel.value,10);upd()});
@@ -218,7 +232,7 @@ function build(){
   });
   cell("sep","");
   cell("rl","不足");
-  for(var t=0;t<4;t++)cell("res","0").id="r"+t;
+  for(var t=0;t<4;t++){var rc=cell("tc"+t+" rb","");rc.innerHTML='<div class="res" id="r'+t+'">0</div>'}
   cell("","");
 }
 
@@ -249,9 +263,9 @@ function upd(){
   var r=calc(S),sum=0,tb="";
   for(var t=0;t<4;t++){
     sum+=r.tot[t];
-    var e=$("r"+t);e.textContent=r.tot[t];e.className="res"+(r.tot[t]?"":" z");
+    var e=$("r"+t);e.textContent=r.tot[t];e.className="res"+(r.tot[t]?" s":" z");
   }
-  S.b.forEach(function(b,i){
+  S.b.forEach(function(b,i){var gs=$("g"+i);if(gs)gs.className="g"+b.gain;
     document.querySelectorAll(".bl"+i+",.bc"+i+",.bg"+i).forEach(function(n){n.hidden=!b.on});
     if(b.on)tb+='<tr><td>'+(i+1)+'戦目</td>'+r.lack[i].map(function(v){return'<td>'+v+'</td>'}).join("")+'<td><b>'+r.lack[i].reduce(function(a,c){return a+c},0)+'</b></td></tr>';
   });
@@ -294,7 +308,7 @@ function upd(){
   if(emptyN)msg.unshift("赤枠の空欄は未入力です。");
   var w=$("warn");w.hidden=!msg.length;w.innerHTML=msg.join("<br>");
   $("tot").innerHTML=sum?'4種合計あと<b>'+sum+'</b>個の種が必要です':'種は足りています';
-  try{localStorage.setItem("romanCost",JSON.stringify(S))}catch(e){}
+  try{localStorage.setItem("romanCost2",JSON.stringify(S))}catch(e){}
 }
 
 var armT=null;
