@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="種と花の数、対戦校のコストから、あと何個の種が必要かを計算するツール。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ロマン開花學園 コスト計算">
+<meta property="og:description" content="種と花の数、対戦校のコストから、あと何個の種が必要かを計算します。">
+<meta property="og:image" content="__SITE_URL__/og-image.png">
+<meta property="og:url" content="__SITE_URL__/">
+<meta name="twitter:card" content="summary_large_image">
+<title>ロマン開花學園 コスト計算</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+/* 行列入れ替え版。列=筋力/技術/変化/精神、行=花・種・1〜3戦目のコスト・不足 */
+:root{--bg:#14171f;--panel:#222a3b;--card:#181d2a;--line:#2b3347;--fg:#f3f5fa;--mut:#9aa5bd;
+--red:#ff6b6b;--blue:#5db4ff;--grn:#6ee7a0;--yel:#ffd04a;--cy:#6fd8f0;
+--font:'Noto Sans JP','Hiragino Sans','Meiryo',system-ui,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font:14px/1.5 var(--font);margin:0;padding-inline:12px;padding-block:14px 28px}
+main{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+h1{font-size:19px;margin:0;line-height:1.3}
+.ex{margin:0;color:var(--yel);font-size:12px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;min-width:0}
+.g{display:grid;grid-template-columns:52px repeat(4,minmax(0,1fr)) minmax(0,1.25fr);gap:6px 5px;align-items:center}
+.h{font-size:11px;color:var(--mut);text-align:center;line-height:1.25}
+.h.grp{border-bottom:1px solid var(--line);padding-bottom:2px}
+.h.b{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--fg);font-weight:700;font-size:12px}
+.h.b label{display:flex;align-items:center;gap:3px;font-weight:400;font-size:10px;color:var(--mut);cursor:pointer}
+.h.b input{width:14px;height:14px;margin:0;accent-color:var(--blue)}
+.k{font-size:13px;font-weight:700;white-space:nowrap}
+.rl{font-size:13px;font-weight:700;line-height:1.2;display:flex;flex-direction:column;gap:2px}
+.rl label{display:flex;align-items:center;gap:3px;font-weight:400;font-size:10px;color:var(--mut);cursor:pointer}
+.rl input{width:14px;height:14px;margin:0;accent-color:var(--blue)}
+.tg{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin-bottom:8px}
+.tg label{display:flex;align-items:center;gap:5px;cursor:pointer;color:var(--fg)}
+.tg input{width:16px;height:16px;margin:0;accent-color:var(--blue)}
+.warn{margin:6px 0 0;font-size:12px;color:var(--red);text-align:center}
+input.auto{color:var(--blue);border-style:dashed}
+input.bad{border-color:var(--red);box-shadow:0 0 0 1px var(--red);background:#2a1a20}
+.rs{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:6px;border-top:1px solid var(--line)}
+button.arm{border-color:var(--red);color:var(--red)}
+.xbtn{display:block;margin:8px auto 0;width:max-content;padding:8px 18px;border-radius:8px;background:#f3f5fa;color:#14171f;font-weight:700;font-size:13px;text-decoration:none}
+.xbtn:hover{background:#fff}
+.xbtn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sep{grid-column:1/-1;height:1px;background:var(--line)}
+.h.k{font-size:13px}
+.k0{color:var(--red)}.k1{color:var(--grn)}.k2{color:var(--yel)}.k3{color:var(--cy)}
+input[type=number],select{width:100%;height:38px;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:7px;padding:0 2px;font:inherit;font-size:16px;text-align:center;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+select{font-size:14px;padding:0;text-align-last:center;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mut) 50%),linear-gradient(135deg,var(--mut) 50%,transparent 50%);background-size:4px 4px;background-position:calc(100% - 7px) 17px,calc(100% - 3px) 17px;background-repeat:no-repeat}
+input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.off{opacity:.3;pointer-events:none}
+.res{text-align:center;font-size:24px;font-weight:700;line-height:38px;border-radius:7px;background:var(--card);border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.res.z{color:var(--grn)}
+.gl{font-size:11px;color:var(--mut);line-height:1.2}
+.tot{margin:2px 0 0;font-size:14px;text-align:center}
+.tot b{font-size:20px;font-variant-numeric:tabular-nums}
+details{font-size:12px}
+summary{cursor:pointer;color:var(--mut);padding:4px 0}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
+th,td{padding:4px 6px;text-align:right;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+tr.sum td{border-top:1px solid var(--mut)}
+th{color:var(--mut);font-weight:500}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.note{font-size:11px;color:var(--mut);margin:0}
+button{height:32px;padding:0 12px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+</style>
+</head>
+<body>
+<main>
+<h1>ロマン開花學園 コスト計算</h1>
+<p class="ex" id="exnote">数値は入力例です。自分の数に書き換えてください。</p>
+
+<div class="panel">
+<div class="tg" id="tg"></div>
+<div class="g" id="g"></div>
+<p class="warn" id="warn" hidden></p>
+<p class="tot" id="tot"></p>
+<a id="xs" class="xbtn" target="_blank" rel="noopener" hidden>Xでシェア</a>
+</div>
+
+<div class="panel">
+<details>
+<summary>試合ごとの不足数を見る</summary>
+<div class="tw"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
+</details>
+<p class="note">対戦校のコストは、3つ入力すると残り1つが自動で入ります（青字）。花は試合で減りません。種は試合で消費し、勝利でもらえる花は次の試合から効きます。</p>
+</div>
+<div class="rs"><button id="clr" type="button">入力をリセット</button><span class="note" id="rsn"></span></div>
+<p class="note" style="margin-top:14px;text-align:center">本サイトは非公式のファンサイトです。ゲーム画像は使用していません。<br>「実況パワフルプロ野球」© Konami Digital Entertainment</p>
+</main>
+<script>
+var K=["筋力","技術","変化","精神"];
+var EX={seeds:[12,8,5,10],flowers:[3,2,0,1],
+ b:[{on:true,cost:[2,3,4,9],gain:0},{on:true,cost:[3,5,7,13],gain:1},{on:true,cost:[4,5,10,10],gain:3}]};
+var S=JSON.parse(JSON.stringify(EX));
+try{var sv=localStorage.getItem("romanCost");if(sv){S=JSON.parse(sv);document.getElementById("exnote").hidden=true}}catch(e){}
+S.b.forEach(function(b){if(!(b.gain>=0&&b.gain<4))b.gain=0;if(!b.auto)b.auto=[false,false,false,false]});
+
+var COMBO=[[2,2,2,2],[1,2,3,6],[3,3,3,4],[2,3,4,9],[3,4,6,6],[7,7,7,7],[3,5,7,13],[4,5,10,10]].map(function(c){return c.join(",")});
+var OK=[1,2,3,4,5,6,7,9,10,13];
+function $(i){return document.getElementById(i)}
+function num(v){v=parseInt(v,10);return isNaN(v)||v<0?0:v}
+
+function calc(s){
+  var stock=s.seeds.slice(),fl=s.flowers.slice(),lack=[],tot=[0,0,0,0];
+  s.b.forEach(function(b){
+    var lk=[0,0,0,0];
+    if(b.on){
+      for(var t=0;t<4;t++){
+        var nd=Math.max(0,b.cost[t]-fl[t]);
+        lk[t]=Math.max(0,nd-stock[t]);
+        stock[t]=Math.max(0,stock[t]-nd);
+        tot[t]+=lk[t];
+      }
+      fl[b.gain]+=1;
+    }
+    lack.push(lk);
+  });
+  return{lack:lack,tot:tot};
+}
+
+function inp(id,val,cb){
+  var el=document.createElement("input");
+  el.type="number";el.id=id;el.min="0";el.step="1";el.inputMode="numeric";el.value=val;
+  el.addEventListener("input",function(){cb(num(el.value))});
+  el.addEventListener("blur",function(){upd()});
+  return el;
+}
+function cell(cls,node){var d=document.createElement("div");d.className=cls;if(typeof node==="string")d.innerHTML=node;else d.appendChild(node);$("g").appendChild(d);return d}
+
+function build(){
+  var g=$("g");g.innerHTML="";
+  var tg=$("tg");tg.innerHTML='<span>計算する試合</span><label><input type="checkbox" checked disabled>1戦目</label>';
+  S.b.forEach(function(b,i){
+    if(i===0)return;
+    var lb=document.createElement("label");lb.innerHTML='<input type="checkbox" id="on'+i+'">'+(i+1)+'戦目';
+    var cb=lb.querySelector("input");cb.checked=b.on;cb.addEventListener("change",function(){b.on=cb.checked;upd()});
+    tg.appendChild(lb);
+  });
+  cell("h","");
+  for(var t=0;t<4;t++)cell("h k k"+t,K[t]);
+  cell("h","勝利で<br>もらえる花");
+  cell("rl","花");
+  for(var t=0;t<4;t++)(function(t){cell("",inp("f"+t,S.flowers[t],function(v){S.flowers[t]=v;upd()}))})(t);
+  cell("","");
+  cell("rl","種");
+  for(var t=0;t<4;t++)(function(t){cell("",inp("s"+t,S.seeds[t],function(v){S.seeds[t]=v;upd()}))})(t);
+  cell("","");
+  cell("sep","");
+  S.b.forEach(function(b,i){
+    cell("rl bl"+i,(i+1)+"戦目");
+    for(var t=0;t<4;t++)(function(t){cell("bc"+i,inp("c"+i+"_"+t,b.cost[t],function(v){b.cost[t]=v;b.auto[t]=false;upd()}))})(t);
+    var sel=document.createElement("select");sel.id="g"+i;sel.setAttribute("aria-label",(i+1)+"戦目に勝利でもらえる花");
+    sel.innerHTML=K.map(function(k,j){return'<option value="'+j+'">'+k+'</option>'}).join("");
+    sel.value=b.gain;sel.addEventListener("change",function(){b.gain=parseInt(sel.value,10);upd()});
+    cell("bg"+i,sel);
+  });
+  cell("sep","");
+  cell("rl","不足");
+  for(var t=0;t<4;t++)cell("res","0").id="r"+t;
+  cell("","");
+}
+
+function resolve(){
+  S.b.forEach(function(b,i){
+    var foc=document.activeElement,fid=foc&&foc.id,prev=b.auto.slice(),emp=[];
+    for(var t=0;t<4;t++){if(b.auto[t]){b.cost[t]=0;b.auto[t]=false}if(b.cost[t]===0)emp.push(t)}
+    if(emp.length===1&&fid!=="c"+i+"_"+emp[0]){
+      var t0=emp[0],known=[];
+      for(var t=0;t<4;t++)if(t!==t0)known.push(b.cost[t]);
+      var ks=known.slice().sort(function(m,n){return m-n}),found=null,n=0;
+      COMBO.forEach(function(c){
+        var rest=c.split(",").map(Number),ok=true;
+        ks.forEach(function(x){var j=rest.indexOf(x);if(j<0)ok=false;else rest.splice(j,1)});
+        if(ok){found=rest[0];n++}
+      });
+      if(n===1){b.cost[t0]=found;b.auto[t0]=true}
+    }
+    for(var t=0;t<4;t++){
+      var el=$("c"+i+"_"+t);
+      if((b.auto[t]||prev[t])&&el&&document.activeElement!==el)el.value=b.cost[t];
+      if(el)el.classList.toggle("auto",b.auto[t]);
+    }
+  });
+}
+function upd(){
+  resolve();
+  var r=calc(S),sum=0,tb="";
+  for(var t=0;t<4;t++){
+    sum+=r.tot[t];
+    var e=$("r"+t);e.textContent=r.tot[t];e.className="res"+(r.tot[t]?"":" z");
+  }
+  S.b.forEach(function(b,i){
+    document.querySelectorAll(".bl"+i+",.bc"+i+",.bg"+i).forEach(function(n){n.hidden=!b.on});
+    if(b.on)tb+='<tr><td>'+(i+1)+'戦目</td>'+r.lack[i].map(function(v){return'<td>'+v+'</td>'}).join("")+'<td><b>'+r.lack[i].reduce(function(a,c){return a+c},0)+'</b></td></tr>';
+  });
+  tb+='<tr class="sum"><td>合計</td>'+r.tot.map(function(v){return'<td><b>'+v+'</b></td>'}).join("")+'<td><b>'+sum+'</b></td></tr>';
+  $("th").innerHTML='<tr><th>試合</th>'+K.map(function(k,t){return'<th class="k'+t+'">'+k+'</th>'}).join("")+'<th>合計</th></tr>';
+  $("tb").innerHTML=tb;
+  var emptyN=0,msg=[];
+  S.b.forEach(function(b,i){
+    var flag=[false,false,false,false],nz=[];
+    for(var t=0;t<4;t++){
+      if(!b.on)continue;
+      if(b.cost[t]===0){flag[t]=true;emptyN++}else nz.push(t);
+    }
+    if(b.on&&nz.length){
+      // 各組み合わせとの一致数を数え、最も近い組み合わせとの差で「間違い候補」を決める
+      var best=-1,odd={},groups=0;
+      COMBO.forEach(function(c){
+        var rest=c.split(",").map(Number),un=[];
+        nz.forEach(function(t){var j=rest.indexOf(b.cost[t]);if(j<0)un.push(t);else rest.splice(j,1)});
+        var ov=nz.length-un.length;
+        if(ov>best){best=ov;odd={};groups=0}
+        if(ov===best){groups++;un.forEach(function(t){odd[t]=true})}
+      });
+      var oddL=Object.keys(odd).map(Number);
+      if(oddL.length){
+        if(best===nz.length-1){
+          oddL.forEach(function(t){flag[t]=true});
+          msg.push((i+1)+"戦目の"+oddL.map(function(t){return K[t]+"（"+b.cost[t]+"）"}).join("・")+(oddL.length>1?"のどれか":"")+"は間違っている可能性があります。");
+        }else{
+          nz.forEach(function(t){flag[t]=true});
+          msg.push((i+1)+"戦目のコストの組み合わせは、ゲームに存在しません。");
+        }
+      }
+    }
+    for(var t=0;t<4;t++){
+      var x=$("c"+i+"_"+t);
+      x.classList.toggle("bad",flag[t]);x.setAttribute("aria-invalid",flag[t]?"true":"false");
+    }
+  });
+  if(emptyN)msg.unshift("赤枠の空欄は未入力です。");
+  var w=$("warn");w.hidden=!msg.length;w.innerHTML=msg.join("<br>");
+  $("tot").innerHTML=sum?'4種合計あと<b>'+sum+'</b>個の種が必要です':'種は足りています';
+  var xs=$("xs");
+  if(sum&&!msg.length){
+    var tx="ロマン開花學園 コスト計算\n4種合計あと"+sum+"個の種が必要です\n"+K.map(function(k,t){return k+" "+r.tot[t]}).join(" / ");
+    var u=(location.protocol==="http:"||location.protocol==="https:")?location.href.split("#")[0]:"";
+    xs.href="https://x.com/intent/post?text="+encodeURIComponent(tx)+(u?"&url="+encodeURIComponent(u):"");
+    xs.hidden=false;
+  }else xs.hidden=true;
+  try{localStorage.setItem("romanCost",JSON.stringify(S))}catch(e){}
+}
+
+var armT=null;
+function disarm(){var c=$("clr");c.classList.remove("arm");c.textContent="入力をリセット";$("rsn").textContent="";armT=null}
+$("clr").addEventListener("click",function(){
+  var c=$("clr");
+  if(!armT){c.classList.add("arm");c.textContent="もう一度押すとリセット";$("rsn").textContent="すべて0に戻ります";armT=setTimeout(disarm,3500);return}
+  clearTimeout(armT);disarm();
+  S={seeds:[0,0,0,0],flowers:[0,0,0,0],b:[{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]},{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]},{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]}]};
+  $("exnote").hidden=true;build();upd();
+});
+build();upd();
+</script>
+
+</body>
+</html>
