@@ -7,8 +7,8 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="ロマン開花學園 コスト計算">
 <meta property="og:description" content="種と花の数、対戦校のコストから、あと何個の種が必要かを計算します。">
-<meta property="og:image" content="__SITE_URL__/og-image.png">
-<meta property="og:url" content="__SITE_URL__/">
+<meta property="og:image" content="https://pawapuryotsu.github.io/roman_costchecker/og-image.png">
+<meta property="og:url" content="https://pawapuryotsu.github.io/roman_costchecker/">
 <meta name="twitter:card" content="summary_large_image">
 <title>ロマン開花學園 コスト計算</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
@@ -92,12 +92,12 @@ button{height:32px;padding:0 12px;border-radius:7px;border:1px solid var(--line)
 <p class="note">対戦校のコストは、3つ入力すると残り1つが自動で入ります（青字）。花は試合で減りません。種は試合で消費し、勝利でもらえる花は次の試合から効きます。</p>
 </div>
 <div class="rs"><button id="clr" type="button">入力をリセット</button><span class="note" id="rsn"></span></div>
-<p class="note" style="margin-top:14px;text-align:center">本サイトは非公式のファンサイトです。ゲーム画像は使用していません。<br>「実況パワフルプロ野球」© Konami Digital Entertainment</p>
+<p class="note" style="margin-top:14px;text-align:center">本サイトは非公式のファンサイトです。<br>「実況パワフルプロ野球」© Konami Digital Entertainment</p>
 </main>
 <script>
 var K=["筋力","技術","変化","精神"];
-var EX={seeds:[12,8,5,10],flowers:[3,2,0,1],
- b:[{on:true,cost:[2,3,4,9],gain:0},{on:true,cost:[3,5,7,13],gain:1},{on:true,cost:[4,5,10,10],gain:3}]};
+var EX={seeds:[10,10,10,10],flowers:[3,2,0,2],
+ b:[{on:true,cost:[7,7,7,7],gain:3},{on:true,cost:[3,5,7,13],gain:1},{on:true,cost:[10,5,4,10],gain:2}]};
 var S=JSON.parse(JSON.stringify(EX));
 try{var sv=localStorage.getItem("romanCost");if(sv){S=JSON.parse(sv);document.getElementById("exnote").hidden=true}}catch(e){}
 S.b.forEach(function(b){if(!(b.gain>=0&&b.gain<4))b.gain=0;if(!b.auto)b.auto=[false,false,false,false]});
