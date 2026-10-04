@@ -42,14 +42,22 @@ input.auto{color:var(--blue);border-style:dashed}
 input.bad{border-color:var(--red);box-shadow:0 0 0 1px var(--red);background:#2a1a20}
 .rs{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:6px;border-top:1px solid var(--line)}
 button.arm{border-color:var(--red);color:var(--red)}
+.rs2{display:flex;gap:10px}
+.rs2 button,.rs2 .xbtn{flex:1;height:44px;margin:0;width:auto;padding:0 12px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:14px}
 .xbtn{display:block;margin:8px auto 0;width:max-content;padding:8px 18px;border-radius:8px;background:#f3f5fa;color:#14171f;font-weight:700;font-size:13px;text-decoration:none}
 .xbtn:hover{background:#fff}
 .xbtn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.caut{margin:8px 0 0;padding:8px 10px;border:1px solid var(--yel);border-radius:8px;font-size:12px;line-height:1.5;color:var(--fg);background:#2a2618}
+.caut b{color:var(--yel);margin-right:8px}
+.bg select{border-color:var(--yel)}
+.how h2{font-size:15px;margin:0 0 6px}
+.how ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.how ul{margin:10px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--mut)}
+.how h3{font-size:12px;margin:12px 0 0;color:var(--mut);font-weight:500}
 .sep{grid-column:1/-1;height:1px;background:var(--line)}
 .h.k{font-size:13px}
 .k0{color:var(--red)}.k1{color:var(--grn)}.k2{color:var(--yel)}.k3{color:var(--cy)}
-input[type=number],select{width:100%;height:38px;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:7px;padding:0 2px;font:inherit;font-size:16px;text-align:center;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
-input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input.n,select{width:100%;height:38px;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:7px;padding:0 2px;font:inherit;font-size:16px;text-align:center;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
 select{font-size:14px;padding:0;text-align-last:center;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mut) 50%),linear-gradient(135deg,var(--mut) 50%,transparent 50%);background-size:4px 4px;background-position:calc(100% - 7px) 17px,calc(100% - 3px) 17px;background-repeat:no-repeat}
 input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
 .off{opacity:.3;pointer-events:none}
@@ -79,9 +87,9 @@ button{height:32px;padding:0 12px;border-radius:7px;border:1px solid var(--line)
 <div class="panel">
 <div class="tg" id="tg"></div>
 <div class="g" id="g"></div>
+<p class="caut"><b>注意</b>勝利でもらえる花は、対戦校ごとに決まっています。ゲーム内の表示と同じ花を選んでください。選び間違えると、あとの試合の不足数がずれます。</p>
 <p class="warn" id="warn" hidden></p>
 <p class="tot" id="tot"></p>
-<a id="xs" class="xbtn" target="_blank" rel="noopener" hidden>Xでシェア</a>
 </div>
 
 <div class="panel">
@@ -91,7 +99,26 @@ button{height:32px;padding:0 12px;border-radius:7px;border:1px solid var(--line)
 </details>
 <p class="note">対戦校のコストは、3つ入力すると残り1つが自動で入ります（青字）。花は試合で減りません。種は試合で消費し、勝利でもらえる花は次の試合から効きます。</p>
 </div>
-<div class="rs"><button id="clr" type="button">入力をリセット</button><span class="note" id="rsn"></span></div>
+<div class="rs2"><button id="clr" type="button">入力をリセット</button><a id="xs" class="xbtn" target="_blank" rel="noopener" href="https://x.com/intent/post?text=ロマン開花學園%20コスト計算%0Ahttps://pawapuryotsu.github.io/roman_costchecker/">Xでシェア</a></div>
+<p class="note" id="rsn" style="text-align:center;min-height:1em"></p>
+<div class="panel how">
+<h2>使い方</h2>
+<ol>
+<li>いま持っている<b>花</b>と<b>種</b>の数を、筋力・技術・変化・精神ごとに入れます。</li>
+<li>1〜3戦目の<b>対戦校のコスト</b>を入れます。3つ入れると、残りの1つは自動で入ります（青字）。</li>
+<li>各戦の<b>勝利でもらえる花</b>を選びます。</li>
+<li>「不足」の行に、練習であと何個の種が必要かが出ます。「4種合計あと○○個」が全体の数です。</li>
+</ol>
+<h3>知っておくと便利</h3>
+<ul>
+<li>花は試合をしても減りません。種は試合で消費します。</li>
+<li>勝利でもらえる花は、次の試合から使えます。</li>
+<li>2戦目・3戦目だけで計算したいときは、「計算する試合」のチェックを外します。</li>
+<li>赤枠は、入力ミスの可能性がある欄です。ゲーム内の数字と見比べてください。</li>
+<li>入力した内容は、この端末のブラウザに保存されます。</li>
+</ul>
+</div>
+
 <p class="note" style="margin-top:14px;text-align:center">本サイトは非公式のファンサイトです。<br>「実況パワフルプロ野球」© Konami Digital Entertainment</p>
 </main>
 <script>
@@ -125,11 +152,39 @@ function calc(s){
   return{lack:lack,tot:tot};
 }
 
+function nextEl(el){
+  var all=[].slice.call(document.querySelectorAll("#g input.n")).filter(function(x){return x.offsetParent!==null&&!x.classList.contains("auto")});
+  var i=all.indexOf(el);return i>=0&&i<all.length-1?all[i+1]:null;
+}
+function go(el){
+  var n=nextEl(el);
+  if(n){n.focus();setTimeout(function(){try{n.select()}catch(e){}},0)}else el.blur();
+}
 function inp(id,val,cb){
-  var el=document.createElement("input");
-  el.type="number";el.id=id;el.min="0";el.step="1";el.inputMode="numeric";el.value=val;
-  el.addEventListener("input",function(){cb(num(el.value))});
-  el.addEventListener("blur",function(){upd()});
+  var cost=id.charAt(0)==="c",el=document.createElement("input"),tm=null;
+  el.type="text";el.className="n";el.id=id;el.value=val;
+  el.setAttribute("inputmode","numeric");el.setAttribute("pattern","[0-9]*");el.setAttribute("enterkeyhint","next");
+  el.setAttribute("autocomplete","off");el.maxLength=cost?2:(id.charAt(0)==="f"?1:3);
+  el.addEventListener("focus",function(){setTimeout(function(){try{el.select()}catch(e){}},0)});
+  el.addEventListener("input",function(ev){
+    var c=el.value.replace(/\D/g,"");if(c!==el.value)el.value=c;
+    cb(num(el.value));
+    clearTimeout(tm);
+    if((ev.inputType||"").indexOf("delete")===0)return;
+    var v=el.value;if(!v)return;
+    // コスト: 2〜9はすぐ次へ。1は10・13の可能性があるので少し待つ。2桁になったら次へ。花・種は入力が止まったら次へ。
+    if(cost){
+      if(v.length>=2||v!=="1")go(el);
+      else tm=setTimeout(function(){if(document.activeElement===el&&el.value)go(el)},700);
+    }else if(id.charAt(0)==="f"){
+      go(el);
+    }else{
+      if(v.length>=3)go(el);
+      else tm=setTimeout(function(){if(document.activeElement===el&&el.value)go(el)},1000);
+    }
+  });
+  el.addEventListener("keydown",function(ev){if(ev.key==="Enter"){ev.preventDefault();go(el)}});
+  el.addEventListener("blur",function(){clearTimeout(tm);upd()});
   return el;
 }
 function cell(cls,node){var d=document.createElement("div");d.className=cls;if(typeof node==="string")d.innerHTML=node;else d.appendChild(node);$("g").appendChild(d);return d}
@@ -239,13 +294,6 @@ function upd(){
   if(emptyN)msg.unshift("赤枠の空欄は未入力です。");
   var w=$("warn");w.hidden=!msg.length;w.innerHTML=msg.join("<br>");
   $("tot").innerHTML=sum?'4種合計あと<b>'+sum+'</b>個の種が必要です':'種は足りています';
-  var xs=$("xs");
-  if(sum&&!msg.length){
-    var tx="ロマン開花學園 コスト計算\n4種合計あと"+sum+"個の種が必要です\n"+K.map(function(k,t){return k+" "+r.tot[t]}).join(" / ");
-    var u=(location.protocol==="http:"||location.protocol==="https:")?location.href.split("#")[0]:"";
-    xs.href="https://x.com/intent/post?text="+encodeURIComponent(tx)+(u?"&url="+encodeURIComponent(u):"");
-    xs.hidden=false;
-  }else xs.hidden=true;
   try{localStorage.setItem("romanCost",JSON.stringify(S))}catch(e){}
 }
 
