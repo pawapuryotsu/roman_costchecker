@@ -578,6 +578,16 @@ $("clr").addEventListener("click",function(){
   S={w:0,pt:0,joker:0,turns:null,seeds:[0,0,0,0],flowers:[0,0,0,0],b:[{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]},{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]},{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]}]};
   $("exnote").hidden=true;build();upd();
 });
+// スマホでは共有シート（Xアプリを選べる）を使う。ブラウザ内でXのログインを求められるのを避けるため。
+$("xs").addEventListener("click",function(ev){
+  var touch=window.matchMedia&&matchMedia("(pointer:coarse)").matches;
+  if(!(touch&&navigator.share))return;
+  ev.preventDefault();
+  navigator.share({text:"ロマン開花學園 コスト計算",url:"https://pawapuryotsu.github.io/roman_costchecker/"}).catch(function(e){
+    if(e&&e.name==="AbortError")return;
+    window.open($("xs").href,"_blank","noopener");
+  });
+});
 build();upd();
 </script>
 
