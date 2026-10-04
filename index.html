@@ -66,6 +66,26 @@ select option{color:var(--fg);background:var(--card)}
 .how ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;font-size:13px}
 .how ul{margin:10px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--mut)}
 .how h3{font-size:12px;margin:12px 0 0;color:var(--mut);font-weight:500}
+.prh{font-size:14px;margin:0 0 8px}
+.prh span{display:block;font-size:11px;font-weight:400;color:var(--mut);margin-top:2px}
+.pgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.pb{min-height:44px;height:auto;padding:4px 2px;font-size:14px;font-weight:700;line-height:1.25;white-space:normal;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+.pb span{display:block}
+.pb small{font-size:10px;font-weight:400;color:var(--mut)}
+.pb:disabled{opacity:.35;cursor:not-allowed}
+.pb.rest{grid-column:span 2}
+.pb .k0{color:var(--red)}.pb .k1{color:var(--grn)}.pb .k2{color:var(--yel)}.pb .k3{color:var(--cy)}
+.wr{display:flex;gap:10px;margin-top:10px}
+.wr button{flex:1;min-width:0;white-space:normal;min-height:44px;height:auto;padding:6px 10px;line-height:1.35;font-size:14px;border-color:var(--blue);color:var(--fg)}
+.wr button#undo{flex:0 0 32%;border-color:var(--line)}
+.wr button#win[hidden]+button#undo{flex:1}
+.wr button:disabled{opacity:.4;cursor:not-allowed}
+.wnote{text-align:center;margin:6px 0 0;min-height:1em}
+.top2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.top2 label{display:block;font-size:12px;color:var(--mut);margin-bottom:3px}
+.top2 .f2{min-width:0}
+.turnw{margin:4px 0 0;text-align:center;font-size:13px;font-weight:700;color:#ff9b9b}
+.tot .sub{display:block;font-size:12px;font-weight:400;color:var(--mut)}
 .sep{grid-column:1/-1;height:1px;padding:0!important;background:#55627e;margin-block:3px}
 .h.k{font-size:13px}
 .k0{color:var(--red)}.k1{color:var(--grn)}.k2{color:var(--yel)}.k3{color:var(--cy)}
@@ -90,6 +110,39 @@ th{color:var(--mut);font-weight:500}
 .foot{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .note{font-size:11px;color:var(--mut);margin:0}
 button{height:32px;padding:0 12px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+
+/* 縦圧縮（iPhone SE 1画面向け） */
+body{padding-block:8px 24px}
+main{gap:6px}
+h1{font-size:16px}
+.ex{font-size:11px;line-height:1.3;margin-top:-4px}
+.panel{padding:8px}
+.top2{gap:8px;margin-bottom:6px}
+.top2 .f2{display:flex;align-items:center;gap:6px}
+.top2 label{margin:0;white-space:nowrap;font-size:12px}
+.tg{margin-bottom:4px;gap:12px}
+.g>div{padding:2px 3px}
+.g>.rl,.g>.h{padding-block:2px}
+.h.tc0,.h.tc1,.h.tc2,.h.tc3{padding-top:4px}
+.h.gh{font-size:10px;white-space:nowrap}
+.sep{margin-block:2px}
+input.n,select{height:32px}
+select{background-position:calc(100% - 7px) 14px,calc(100% - 3px) 14px}
+.res{font-size:20px;line-height:32px}
+.tot{margin:4px 0 0;font-size:13px}
+.tot b{font-size:18px}
+.tot .sub{display:inline;font-size:11px;margin-left:4px}
+.turnw{margin:2px 0 0;font-size:12px}
+.warn{margin:4px 0 0}
+.prh{display:flex;align-items:baseline;gap:8px;margin:0 0 6px;font-size:13px}
+.prh span{display:inline;margin:0;font-size:10px}
+.pgrid{gap:5px}
+.pb{min-height:34px;padding:2px;flex-direction:row;gap:3px;font-size:13px}
+.pb small{font-size:10px}
+.wr{margin-top:6px;gap:8px}
+.wr button{min-height:40px;padding:4px 8px;font-size:13px}
+.wnote{margin:4px 0 0;min-height:0;font-size:11px}
+.caut{margin:0}
 </style>
 </head>
 <body>
@@ -98,13 +151,19 @@ button{height:32px;padding:0 12px;border-radius:7px;border:1px solid var(--line)
 <p class="ex" id="exnote">数値は入力例です。自分の数に書き換えてください。</p>
 
 <div class="panel">
+<div class="top2" id="top2"></div>
 <div class="tg" id="tg"></div>
 <div class="g" id="g"></div>
-<p class="caut"><b>注意</b>勝利でもらえる花は、対戦校ごとに決まっています。ゲーム内の表示と同じ花を選んでください。選び間違えると、あとの試合の不足数がずれます。</p>
 <p class="warn" id="warn" hidden></p>
 <p class="tot" id="tot"></p>
+<p class="turnw" id="turnw" hidden>※コスト不足で勝利不可能です</p>
 </div>
 
+<div class="panel pr"><h2 class="prh">練習で種を追加<span>押すと種が増え、ターン-1</span></h2><div class="pgrid" id="pgrid"></div>
+<div class="wr"><button id="win" type="button">1戦目に勝利（種を引いて花+1）</button><button id="undo" type="button" hidden>元に戻す</button></div>
+<p class="note wnote" id="wnote" aria-live="polite"></p>
+</div>
+<p class="caut"><b>注意</b>勝利でもらえる花は、対戦校ごとに決まっています。ゲーム内の表示と同じ花を選んでください。選び間違えると、あとの試合の不足数がずれます。</p>
 <div class="panel">
 <details>
 <summary>試合ごとの不足数を見る</summary>
@@ -124,6 +183,9 @@ button{height:32px;padding:0 12px;border-radius:7px;border:1px solid var(--line)
 </ol>
 <h3>知っておくと便利</h3>
 <ul>
+<li>心の実は、種が足りないときだけ、種の代わりに使えます。不足分から引いた数が、「4種合計あと○○個」に出ます。</li>
+<li>残りターン数を入れると、練習で集められる種の数（対戦校の分のターンを除いた数×4）と見比べて、間に合わないときは注意が出ます。</li>
+<li>1戦目に勝利したら「1戦目に勝利」を押します。1戦目の分の種が引かれ、もらえる花が+1されて、2戦目以降が1つずつ繰り上がります。「元に戻す」で取り消せます（ページを開き直すと取り消せません）。</li>
 <li>花は試合をしても減りません。種は試合で消費します。</li>
 <li>勝利でもらえる花は、次の試合から使えます。</li>
 <li>2戦目・3戦目だけで計算したいときは、「計算する試合」のチェックを外します。</li>
@@ -136,10 +198,11 @@ button{height:32px;padding:0 12px;border-radius:7px;border:1px solid var(--line)
 </main>
 <script>
 var K=["筋力","技術","変化","精神"];
-var EX={seeds:[10,10,10,10],flowers:[3,2,0,2],
+var EX={joker:2,turns:20,seeds:[10,10,10,10],flowers:[3,2,0,2],
  b:[{on:true,cost:[7,7,7,7],gain:3},{on:true,cost:[3,5,7,13],gain:1},{on:true,cost:[10,5,4,10],gain:2}]};
 var S=JSON.parse(JSON.stringify(EX));
 try{var sv=localStorage.getItem("romanCost2");if(sv){S=JSON.parse(sv);document.getElementById("exnote").hidden=true}}catch(e){}
+if(typeof S.joker!=="number")S.joker=0;if(typeof S.turns!=="number")S.turns=null;
 S.b.forEach(function(b){if(!(b.gain>=0&&b.gain<4))b.gain=0;if(!b.auto)b.auto=[false,false,false,false]});
 
 var COMBO=[[2,2,2,2],[1,2,3,6],[3,3,3,4],[2,3,4,9],[3,4,6,6],[7,7,7,7],[3,5,7,13],[4,5,10,10]].map(function(c){return c.join(",")});
@@ -166,12 +229,34 @@ function calc(s){
 }
 
 function nextEl(el){
-  var all=[].slice.call(document.querySelectorAll("#g input.n")).filter(function(x){return x.offsetParent!==null&&!x.classList.contains("auto")});
+  var all=[].slice.call(document.querySelectorAll("input.n")).filter(function(x){return x.offsetParent!==null&&!x.classList.contains("auto")});
   var i=all.indexOf(el);return i>=0&&i<all.length-1?all[i+1]:null;
 }
 function go(el){
   var n=nextEl(el);
+  // コスト欄の最後（4つ目が自動入力の場合は3つ目）まで入れたら、次の試合ではなく「勝利でもらえる花」へ移る
+  var m=/^c(\d)_\d$/.exec(el.id);
+  if(m){var sel=$("g"+m[1]),nm=n&&/^c(\d)_\d$/.exec(n.id);
+    if(sel&&sel.offsetParent!==null&&!(nm&&nm[1]===m[1])){sel.focus();return}}
   if(n){n.focus();setTimeout(function(){try{n.select()}catch(e){}},0)}else el.blur();
+}
+function gridRows(){
+  var ids=[["jk","tn"],["f0","f1","f2","f3"],["s0","s1","s2","s3"],["c0_0","c0_1","c0_2","c0_3"],["c1_0","c1_1","c1_2","c1_3"],["c2_0","c2_1","c2_2","c2_3"]];
+  return ids.map(function(r){return r.map($).filter(function(x){return x&&x.offsetParent!==null})}).filter(function(r){return r.length});
+}
+// 矢印キー: 左右は前後の欄、上下は同じ列の上下の行へ移る
+function arrow(el,key){
+  var rows=gridRows(),ri=-1,ci=-1;
+  rows.forEach(function(r,i){var j=r.indexOf(el);if(j>=0){ri=i;ci=j}});
+  if(ri<0)return;
+  var tgt=null;
+  if(key==="ArrowLeft")tgt=ci>0?rows[ri][ci-1]:(ri>0?rows[ri-1][rows[ri-1].length-1]:null);
+  else if(key==="ArrowRight")tgt=ci<rows[ri].length-1?rows[ri][ci+1]:(ri<rows.length-1?rows[ri+1][0]:null);
+  else{
+    var nr=ri+(key==="ArrowDown"?1:-1);
+    if(nr>=0&&nr<rows.length){var a=rows[ri].length,b=rows[nr].length;tgt=rows[nr][Math.min(b-1,Math.floor(ci*b/a))]}
+  }
+  if(tgt){tgt.focus();setTimeout(function(){try{tgt.select()}catch(e){}},0)}
 }
 function inp(id,val,cb){
   var cost=id.charAt(0)==="c",el=document.createElement("input"),tm=null;
@@ -183,7 +268,8 @@ function inp(id,val,cb){
     var c=el.value.replace(/\D/g,"");if(c!==el.value)el.value=c;
     cb(num(el.value));
     clearTimeout(tm);
-    if((ev.inputType||"").indexOf("delete")===0)return;
+    // 入力以外（削除・Ctrl+Zの取り消し/やり直し・貼り付けなど）では、次の欄へ自動で移らない
+    if(ev.inputType&&ev.inputType!=="insertText"&&ev.inputType!=="insertCompositionText")return;
     var v=el.value;if(!v)return;
     // コスト: 2〜9はすぐ次へ。1は10・13の可能性があるので少し待つ。2桁になったら次へ。花・種は入力が止まったら次へ。
     if(cost){
@@ -191,13 +277,20 @@ function inp(id,val,cb){
       else tm=setTimeout(function(){if(document.activeElement===el&&el.value)go(el)},700);
     }else if(id.charAt(0)==="f"){
       go(el);
+    }else if(id==="jk"||id==="tn"){
+      // 心の実・残りターン数は2桁まで。2桁になるか、入力が止まったら次へ。
+      if(v.length>=2)go(el);
+      else tm=setTimeout(function(){if(document.activeElement===el&&el.value)go(el)},1000);
     }else{
       // 種は最大39個。1桁目が4〜9（または0）なら確定。1〜3のときだけ2桁目を待つ。
       if(v.length>=2||(v!=="1"&&v!=="2"&&v!=="3"))go(el);
       else tm=setTimeout(function(){if(document.activeElement===el&&el.value)go(el)},700);
     }
   });
-  el.addEventListener("keydown",function(ev){if(ev.key==="Enter"){ev.preventDefault();go(el)}});
+  el.addEventListener("keydown",function(ev){
+    if(ev.key==="Enter"){ev.preventDefault();go(el);return}
+    if(/^Arrow(Left|Right|Up|Down)$/.test(ev.key)&&!ev.ctrlKey&&!ev.altKey&&!ev.metaKey&&!ev.shiftKey){ev.preventDefault();arrow(el,ev.key)}
+  });
   el.addEventListener("blur",function(){clearTimeout(tm);upd()});
   return el;
 }
@@ -205,6 +298,12 @@ function cell(cls,node){var d=document.createElement("div");d.className=cls;if(t
 
 function build(){
   var g=$("g");g.innerHTML="";
+  var t2=$("top2");t2.innerHTML="";
+  [["jk","心の実",S.joker,function(v){S.joker=v;upd()}],["tn","残りターン数",S.turns===null?"":S.turns,function(v){S.turns=$("tn").value===""?null:v;upd()}]].forEach(function(d){
+    var w=document.createElement("div");w.className="f2";
+    w.innerHTML='<label for="'+d[0]+'">'+d[1]+'</label>';
+    w.appendChild(inp(d[0],d[2],d[3]));t2.appendChild(w);
+  });
   var tg=$("tg");tg.innerHTML='<span>計算する試合</span><label><input type="checkbox" checked disabled>1戦目</label>';
   S.b.forEach(function(b,i){
     if(i===0)return;
@@ -214,7 +313,7 @@ function build(){
   });
   cell("h","");
   for(var t=0;t<4;t++)cell("h k k"+t+" tc"+t,K[t]);
-  cell("h","勝利で<br>もらえる花");
+  cell("h gh","もらえる花");
   cell("rl","花");
   for(var t=0;t<4;t++)(function(t){cell("tc"+t,inp("f"+t,S.flowers[t],function(v){S.flowers[t]=v;upd()}))})(t);
   cell("","");
@@ -224,7 +323,7 @@ function build(){
   cell("sep","");
   S.b.forEach(function(b,i){
     cell("rl bl"+i,(i+1)+"戦目");
-    for(var t=0;t<4;t++)(function(t){cell("bc"+i+" tc"+t,inp("c"+i+"_"+t,b.cost[t],function(v){b.cost[t]=v;b.auto[t]=false;upd()}))})(t);
+    for(var t=0;t<4;t++)(function(t){cell("bc"+i+" tc"+t,inp("c"+i+"_"+t,b.cost[t],function(v){b.cost[t]=v;b.auto[t]=false;if(t===2)fill4(b);upd()}))})(t);
     var sel=document.createElement("select");sel.id="g"+i;sel.setAttribute("aria-label",(i+1)+"戦目に勝利でもらえる花");
     sel.innerHTML=K.map(function(k,j){return'<option value="'+j+'">'+k+'</option>'}).join("");
     sel.value=b.gain;sel.addEventListener("change",function(){b.gain=parseInt(sel.value,10);upd()});
@@ -236,6 +335,14 @@ function build(){
   cell("","");
 }
 
+// 3つ目のコストを入力した時、4つ目に前の値が残っていて組み合わせが合わないなら、1〜3つ目から4つ目を自動入力する
+function fill4(b){
+  var c=b.cost;if(!(c[0]>0&&c[1]>0&&c[2]>0))return;
+  if(COMBO.indexOf(c.slice().sort(function(m,n){return m-n}).join(","))>=0&&c[3]>0)return;
+  var ks=c.slice(0,3).sort(function(m,n){return m-n}),found=null,n=0;
+  COMBO.forEach(function(x){var rest=x.split(",").map(Number),ok=true;ks.forEach(function(k){var j=rest.indexOf(k);if(j<0)ok=false;else rest.splice(j,1)});if(ok){found=rest[0];n++}});
+  if(n===1)c[3]=0;
+}
 function resolve(){
   S.b.forEach(function(b,i){
     var foc=document.activeElement,fid=foc&&foc.id,prev=b.auto.slice(),emp=[];
@@ -258,6 +365,41 @@ function resolve(){
     }
   });
 }
+var UNDO=[];
+function copy(o){return JSON.parse(JSON.stringify(o))}
+function winFirst(){
+  var b0=S.b[0];
+  if(!(S.b[1].on||S.b[2].on))return;
+  if($("win").disabled)return;
+  for(var t=0;t<4;t++)if($("c0_"+t).classList.contains("bad"))return;
+  UNDO.push(copy(S));if(UNDO.length>30)UNDO.shift();
+  var usedJ=0;
+  for(var t=0;t<4;t++){
+    var need=Math.max(0,b0.cost[t]-S.flowers[t]);
+    usedJ+=Math.max(0,need-S.seeds[t]);
+    S.seeds[t]=Math.max(0,S.seeds[t]-need);
+  }
+  S.joker=Math.max(0,S.joker-usedJ);
+  S.flowers[b0.gain]+=1;
+  if(S.turns!==null&&S.turns>0)S.turns-=1;
+  var rest=[S.b[1],S.b[2]].filter(function(b){return b.on});
+  var blank=function(){return{on:false,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]}};
+  if(!rest.length)rest.push(blank());
+  rest[0].on=true;
+  while(rest.length<3)rest.push(blank());
+  S.b=rest;
+  build();upd();
+  $("wnote").textContent="1戦目に勝利しました。種と花を更新し、残りの試合を繰り上げました。"+(S.turns!==null?"残りターンを1減らしました。":"")+(usedJ?"心の実を"+usedJ+"個使いました。":"");
+}
+function undoWin(){
+  if(!UNDO.length)return;
+  S=UNDO.pop();
+  build();upd();
+  $("wnote").textContent="元に戻しました。";
+}
+document.addEventListener("input",function(){$("wnote").textContent=""});
+$("win").addEventListener("click",winFirst);
+$("undo").addEventListener("click",undoWin);
 function upd(){
   resolve();
   var r=calc(S),sum=0,tb="";
@@ -307,17 +449,61 @@ function upd(){
   });
   if(emptyN)msg.unshift("赤枠の空欄は未入力です。");
   var w=$("warn");w.hidden=!msg.length;w.innerHTML=msg.join("<br>");
-  $("tot").innerHTML=sum?'4種合計あと<b>'+sum+'</b>個の種が必要です':'種は足りています';
+  var bad0=false;for(var t=0;t<4;t++)if($("c0_"+t)&&$("c0_"+t).classList.contains("bad"))bad0=true;
+  var lack1=r.lack[0].reduce(function(a,c){return a+c},0);
+  var short1=!bad0&&lack1>S.joker;
+  $("win").disabled=bad0||short1;$("win").textContent=short1?"1戦目の種が足りないため、勝利にできません":"1戦目に勝利（種を引いて花+1）";$("win").hidden=!(S.b[1].on||S.b[2].on);
+  PR.forEach(function(p,i){var b=$("pb"+i);if(b)b.disabled=pracOver(p)});
+  $("undo").hidden=!UNDO.length;$("undo").textContent="元に戻す"+(UNDO.length>1?"（"+UNDO.length+"）":"");
+  var needJ=Math.max(0,sum-S.joker),usedJ2=Math.min(sum,S.joker);
+  if(needJ>0)$("tot").innerHTML='4種合計あと<b>'+needJ+'</b>個の種が必要です'+(usedJ2?'<span class="sub">（心の実'+usedJ2+'個で補充済み）</span>':'');
+  else if(sum>0)$("tot").innerHTML='心の実'+sum+'個で不足分をまかなえます';
+  else $("tot").innerHTML='種は足りています';
+  var nb=S.b.filter(function(b){return b.on}).length;
+  $("turnw").hidden=!(S.turns!==null&&(S.turns-nb)*4-needJ<0);
   try{localStorage.setItem("romanCost2",JSON.stringify(S))}catch(e){}
 }
 
+// 練習で得られる種のパターン（a=筋力・技術・変化・精神の種、j=心の実）
+var PR=[{a:[4,0,0,0]},{a:[0,4,0,0]},{a:[0,0,4,0]},{a:[0,0,0,4]},{a:[2,2,0,0]},{a:[2,0,2,0]},{a:[2,0,0,2]},{a:[0,2,2,0]},{a:[0,2,0,2]},{a:[0,0,2,2]},{a:[0,0,0,0],j:2}];
+var SH=["筋","技","変","精"];
+(function(){
+  var gr=$("pgrid");
+  PR.forEach(function(p,i){
+    var b=document.createElement("button");b.type="button";b.className="pb"+(p.j?" rest":"");b.id="pb"+i;
+    var h="";
+    if(p.j)h='<span>休む</span><small>心の実+'+p.j+'</small>';
+    else for(var t=0;t<4;t++)if(p.a[t])h+='<span class="k'+t+'">'+SH[t]+p.a[t]+'</span>';
+    b.innerHTML=h;
+    b.addEventListener("click",function(){practice(i)});
+    gr.appendChild(b);
+  });
+})();
+function pracOver(p){
+  for(var t=0;t<4;t++)if(S.seeds[t]+p.a[t]>39)return true;
+  if(S.joker+(p.j||0)>99)return true;
+  if(S.turns!==null&&S.turns<=0)return true;
+  return false;
+}
+function practice(i){
+  var p=PR[i];if(pracOver(p))return;
+  UNDO.push(copy(S));if(UNDO.length>30)UNDO.shift();
+  for(var t=0;t<4;t++)S.seeds[t]+=p.a[t];
+  S.joker+=p.j||0;
+  if(S.turns!==null)S.turns-=1;
+  build();upd();
+  var parts=[];
+  for(var t=0;t<4;t++)if(p.a[t])parts.push(K[t]+"の種+"+p.a[t]);
+  if(p.j)parts.push("心の実+"+p.j);
+  $("wnote").textContent=parts.join("、")+(S.turns!==null?"。残りターン−1。":"。");
+}
 var armT=null;
 function disarm(){var c=$("clr");c.classList.remove("arm");c.textContent="入力をリセット";$("rsn").textContent="";armT=null}
 $("clr").addEventListener("click",function(){
   var c=$("clr");
   if(!armT){c.classList.add("arm");c.textContent="もう一度押すとリセット";$("rsn").textContent="すべて0に戻ります";armT=setTimeout(disarm,3500);return}
   clearTimeout(armT);disarm();
-  S={seeds:[0,0,0,0],flowers:[0,0,0,0],b:[{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]},{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]},{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]}]};
+  S={joker:0,turns:null,seeds:[0,0,0,0],flowers:[0,0,0,0],b:[{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]},{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]},{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]}]};
   $("exnote").hidden=true;build();upd();
 });
 build();upd();
