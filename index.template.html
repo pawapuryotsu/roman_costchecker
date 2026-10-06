@@ -7,8 +7,8 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="ロマン開花學園 コスト計算">
 <meta property="og:description" content="種と花の数、対戦校のコストから、あと何個の種が必要かを計算します。">
-<meta property="og:image" content="https://pawapuryotsu.github.io/roman_costchecker/og-image.png">
-<meta property="og:url" content="https://pawapuryotsu.github.io/roman_costchecker/">
+<meta property="og:image" content="__SITE_URL__/og-image.png">
+<meta property="og:url" content="__SITE_URL__/">
 <meta name="twitter:card" content="summary_large_image">
 <title>ロマン開花學園 コスト計算</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
@@ -210,7 +210,7 @@ select{background-position:calc(100% - 7px) 13px,calc(100% - 3px) 13px}
 </details>
 <p class="note">対戦校のコストは、3つ入力すると残り1つが自動で入ります（青字）。花は試合で減りません。種は試合で消費し、勝利でもらえる花は次の試合から効きます。</p>
 </div>
-<div class="rs2"><button id="clr" type="button">入力をリセット</button><a id="xs" class="xbtn" target="_blank" rel="noopener" href="https://x.com/intent/post?text=ロマン開花學園%20コスト計算%0Ahttps://pawapuryotsu.github.io/roman_costchecker/">Xでシェア</a></div>
+<div class="rs2"><button id="clr" type="button">入力をリセット</button><a id="xs" class="xbtn" target="_blank" rel="noopener" href="https://x.com/intent/post?text=ロマン開花學園%20コスト計算%0A__SITE_URL__/">Xでシェア</a></div>
 <p class="note" id="rsn" style="text-align:center;min-height:1em"></p>
 <div class="panel how">
 <h2>使い方</h2>
@@ -591,7 +591,7 @@ $("xs").addEventListener("click",function(ev){
   var touch=window.matchMedia&&matchMedia("(pointer:coarse)").matches;
   if(!(touch&&navigator.share))return;
   ev.preventDefault();
-  navigator.share({text:"ロマン開花學園 コスト計算",url:"https://pawapuryotsu.github.io/roman_costchecker/"}).catch(function(e){
+  navigator.share({text:"ロマン開花學園 コスト計算",url:"__SITE_URL__/"}).catch(function(e){
     if(e&&e.name==="AbortError")return;
     window.open($("xs").href,"_blank","noopener");
   });
