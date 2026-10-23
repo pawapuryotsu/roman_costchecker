@@ -186,7 +186,6 @@ select{background-position:calc(100% - 7px) 13px,calc(100% - 3px) 13px}
 <body>
 <main>
 <h1>ロマン開花學園 コスト計算</h1>
-<p class="ex" id="exnote">数値は入力例です。自分の数に書き換えてください。</p>
 
 <div class="panel">
 <div class="top2" id="top2"></div>
@@ -241,6 +240,7 @@ select{background-position:calc(100% - 7px) 13px,calc(100% - 3px) 13px}
 <details class="log" style="margin-top:14px">
 <summary>更新履歴</summary>
 <ul class="note" style="padding-left:18px;line-height:1.7">
+<li>2026/10/23　初めて開いたときの数値を入力例ではなく全て0にしました。</li>
 <li>2026/10/06　「勝利」を押した後に「3試合」を押すと4戦目が出てしまう不具合を修正しました。</li>
 </ul>
 </details>
@@ -249,10 +249,9 @@ select{background-position:calc(100% - 7px) 13px,calc(100% - 3px) 13px}
 </main>
 <script>
 var K=["筋力","技術","変化","精神"];
-var EX={joker:2,turns:20,seeds:[10,10,10,10],flowers:[3,2,0,2],
- b:[{on:true,cost:[7,7,7,7],gain:3},{on:true,cost:[3,5,7,13],gain:1},{on:true,cost:[10,5,4,10],gain:2}]};
-var S=JSON.parse(JSON.stringify(EX));
-try{var sv=localStorage.getItem("romanCost2");if(sv){S=JSON.parse(sv);document.getElementById("exnote").hidden=true}}catch(e){}
+function zero(){return {w:0,pt:0,joker:0,turns:null,seeds:[0,0,0,0],flowers:[0,0,0,0],b:[0,1,2].map(function(){return {on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]}})}}
+var S=zero();
+try{var sv=localStorage.getItem("romanCost2");if(sv)S=JSON.parse(sv)}catch(e){}
 if(typeof S.w!=="number")S.w=0;if(typeof S.pt!=="number")S.pt=0;if(typeof S.joker!=="number")S.joker=0;if(typeof S.turns!=="number")S.turns=null;
 S.b.forEach(function(b){if(!(b.gain>=0&&b.gain<4))b.gain=0;if(!b.auto)b.auto=[false,false,false,false]});
 
@@ -583,8 +582,7 @@ $("clr").addEventListener("click",function(){
   var c=$("clr");
   if(!armT){c.classList.add("arm");c.textContent="もう一度押すとリセット";$("rsn").textContent="すべて0に戻ります";armT=setTimeout(disarm,3500);return}
   clearTimeout(armT);disarm();
-  S={w:0,pt:0,joker:0,turns:null,seeds:[0,0,0,0],flowers:[0,0,0,0],b:[{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]},{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]},{on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]}]};
-  $("exnote").hidden=true;build();upd();
+  S=zero();build();upd();
 });
 // スマホでは共有シート（Xアプリを選べる）を使う。ブラウザ内でXのログインを求められるのを避けるため。
 $("xs").addEventListener("click",function(ev){
