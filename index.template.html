@@ -240,7 +240,7 @@ select{background-position:calc(100% - 7px) 13px,calc(100% - 3px) 13px}
 <details class="log" style="margin-top:14px">
 <summary>更新履歴</summary>
 <ul class="note" style="padding-left:18px;line-height:1.7">
-<li>2026/10/23　初めて開いたときの数値を入力例ではなく全て0にしました。</li>
+<li>2026/10/23　開いたとき・ページを更新したときの数値を、毎回全て0から始まるようにしました（入力内容は保存されません）。</li>
 <li>2026/10/06　「勝利」を押した後に「3試合」を押すと4戦目が出てしまう不具合を修正しました。</li>
 </ul>
 </details>
@@ -251,8 +251,8 @@ select{background-position:calc(100% - 7px) 13px,calc(100% - 3px) 13px}
 var K=["筋力","技術","変化","精神"];
 function zero(){return {w:0,pt:0,joker:0,turns:null,seeds:[0,0,0,0],flowers:[0,0,0,0],b:[0,1,2].map(function(){return {on:true,cost:[0,0,0,0],gain:0,auto:[false,false,false,false]}})}}
 var S=zero();
-try{var sv=localStorage.getItem("romanCost2");if(sv)S=JSON.parse(sv)}catch(e){}
-if(typeof S.w!=="number")S.w=0;if(typeof S.pt!=="number")S.pt=0;if(typeof S.joker!=="number")S.joker=0;if(typeof S.turns!=="number")S.turns=null;
+// 毎回0から始める。以前の版が保存した入力は消しておく
+try{localStorage.removeItem("romanCost2")}catch(e){}
 S.b.forEach(function(b){if(!(b.gain>=0&&b.gain<4))b.gain=0;if(!b.auto)b.auto=[false,false,false,false]});
 
 var COMBO=[[2,2,2,2],[1,2,3,6],[3,3,3,4],[2,3,4,9],[3,4,6,6],[7,7,7,7],[3,5,7,13],[4,5,10,10]].map(function(c){return c.join(",")});
@@ -537,7 +537,6 @@ function upd(){
   else $("tot").innerHTML='種は足りています';
   var nb=S.b.filter(function(b){return b.on}).length;
   $("turnw").hidden=!(S.turns!==null&&(S.turns-nb)*4-needJ<0);
-  try{localStorage.setItem("romanCost2",JSON.stringify(S))}catch(e){}
 }
 
 // 練習で得られる種のパターン（a=筋力・技術・変化・精神の種、j=心の実）
